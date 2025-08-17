@@ -1,3 +1,5 @@
+const myLibrary = []
+
 function Book(title, author, pages, haveRead) {
     if (!new.target) {
         throw Error("You must use the 'new' operator to call the constructor");
@@ -7,6 +9,7 @@ function Book(title, author, pages, haveRead) {
     this.author = author
     this.pages = pages
     this.haveRead = haveRead
+    this.id = crypto.randomUUID()
 
     this.info = function() {
         let read = (this.haveRead) ? "have read" : "not read yet";
@@ -15,11 +18,65 @@ function Book(title, author, pages, haveRead) {
     }
 }
 
+function addBookToLibrary(title, author, pages, haveRead) {
+    const newBook = new Book(title, author, pages, haveRead)
+    myLibrary.push(newBook)
+}
 
+function displayLibraryBooks() {
+    const bookContainer = document.querySelector(".book-container")
+    bookContainer.innerHTML = "" // Clear previous books
+    for (let book of myLibrary) {
+        const newBook = document.createElement("div")
+        newBook.classList.add("book")
 
+        newBook.innerHTML += `<p class="title">Book: ${book.title}</p>`;
+        newBook.innerHTML += `<p class="author">Author: ${book.author}</p>`
+        newBook.innerHTML += `<p class="pages">Pages: ${book.pages}</p>`
+        newBook.innerHTML += `<p class="read">Read: ${book.haveRead ? "Yes" : "No"}</p>`
+        newBook.innerHTML += `<button class="button-read">Mark as Read</button>`
+        newBook.innerHTML += `<button class="remove">Remove Book</button>`
+        newBook.querySelector(".button-read").addEventListener("click", () => {
+            book.haveRead = !book.haveRead
+            displayLibraryBooks()
+        })
+        newBook.querySelector(".remove").addEventListener("click", () => {
+            myLibrary.splice(myLibrary.indexOf(book), 1)
+            displayLibraryBooks()
+        })
+        bookContainer.appendChild(newBook)
+    }
+}
 
+document.querySelector(".btn-submit").addEventListener("click", () => {
+    const title = document.querySelector(".title").value
+    const author = document.querySelector(".author").value
+    const pages = document.querySelector(".pages").value
+    const haveRead = document.querySelector(".read").checked
+    
+    if (title && author && pages) {
+        addBookToLibrary(title, author, pages, haveRead)
+        displayLibraryBooks()
+        document.querySelector("#myForm").style.display = "none"
+        document.querySelector("#myForm").reset()
+    } else {
+        alert("Please fill in all fields.")
+    }
+});
 
+document.querySelector(".btn-add-book").addEventListener("click", () => {
+  document.querySelector("#myForm").style.display = "block";
+});
 
+document.querySelector(".btn-cancel").addEventListener("click", () => {
+  document.querySelector("#myForm").style.display = "none";
+});
+
+addBookToLibrary("Harry Potter", "J.K. Rowling", 420, false)
+addBookToLibrary("Art of War", "Sun Tzu", 102, true)
+addBookToLibrary("Meditation", "Julius Ceasar", 240, true)
+
+displayLibraryBooks()
 
 
 
