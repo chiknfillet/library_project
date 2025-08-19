@@ -23,6 +23,7 @@ function addBookToLibrary(title, author, pages, haveRead) {
     myLibrary.push(newBook)
 }
 
+
 function displayLibraryBooks() {
     const bookContainer = document.querySelector(".book-container")
     bookContainer.innerHTML = "" // Clear previous books
