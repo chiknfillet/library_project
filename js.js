@@ -1,33 +1,28 @@
-const myLibrary = []
+class Book {
+    static myLibrary = []
 
-function Book(title, author, pages, haveRead) {
-    if (!new.target) {
-        throw Error("You must use the 'new' operator to call the constructor");
+    constructor(title, author, pages, haveRead) {
+        this.title = title
+        this.author = author
+        this.pages = pages
+        this.haveRead = haveRead
+        this.id = crypto.randomUUID()
     }
 
-    this.title = title
-    this.author = author
-    this.pages = pages
-    this.haveRead = haveRead
-    this.id = crypto.randomUUID()
-
-    this.info = function() {
-        let read = (this.haveRead) ? "have read" : "not read yet";
-
-        return `The ${this.title} by ${this.author}, ${this.pages}, ` + read
+    info() { 
+        read = (this.haveRead) ? "have read" : "not read yet";
+        return `The ${this.title} by ${this.author}, ${this.pages}, ` + read;
     }
-}
 
-function addBookToLibrary(title, author, pages, haveRead) {
-    const newBook = new Book(title, author, pages, haveRead)
-    myLibrary.push(newBook)
-}
+    static addBookToLibrary(title, author, pages, haveRead) {
+        const newBook = new Book(title, author, pages, haveRead)
+        Book.myLibrary.push(newBook)
+    }
 
-
-function displayLibraryBooks() {
+    static displayLibraryBooks() {
     const bookContainer = document.querySelector(".book-container")
     bookContainer.innerHTML = "" // Clear previous books
-    for (let book of myLibrary) {
+    for (let book of Book.myLibrary) {
         const newBook = document.createElement("div")
         newBook.classList.add("book")
 
@@ -48,6 +43,7 @@ function displayLibraryBooks() {
         bookContainer.appendChild(newBook)
     }
 }
+}
 
 document.querySelector(".btn-submit").addEventListener("click", () => {
     const title = document.querySelector(".title").value
@@ -56,8 +52,8 @@ document.querySelector(".btn-submit").addEventListener("click", () => {
     const haveRead = document.querySelector(".read").checked
     
     if (title && author && pages) {
-        addBookToLibrary(title, author, pages, haveRead)
-        displayLibraryBooks()
+        Book.addBookToLibrary(title, author, pages, haveRead)
+        Book.displayLibraryBooks()
         document.querySelector("#myForm").style.display = "none"
         document.querySelector("#myForm").reset()
     } else {
@@ -73,11 +69,11 @@ document.querySelector(".btn-cancel").addEventListener("click", () => {
   document.querySelector("#myForm").style.display = "none";
 });
 
-addBookToLibrary("Harry Potter", "J.K. Rowling", 420, false)
-addBookToLibrary("Art of War", "Sun Tzu", 102, true)
-addBookToLibrary("Meditation", "Julius Ceasar", 240, true)
+Book.addBookToLibrary("Harry Potter", "J.K. Rowling", 420, false)
+Book.addBookToLibrary("Art of War", "Sun Tzu", 102, true)
+Book.addBookToLibrary("Meditation", "Julius Ceasar", 240, true)
 
-displayLibraryBooks()
+Book.displayLibraryBooks()
 
 
 
