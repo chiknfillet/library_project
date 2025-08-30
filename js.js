@@ -45,6 +45,36 @@ class Book {
 }
 }
 
+(function() {
+    const title = document.querySelector(".title")
+    const author = document.querySelector(".author")
+    const pages = document.querySelector(".pages")
+    const haveRead = document.querySelector(".read")
+    const fields = [title, author, pages, haveRead]
+    fields.forEach(input => {
+        input.addEventListener('input', (event) => {
+            const error = document.querySelector(`.${input.classList} + span.error`)
+            if (input.validity.valid) {
+                error.textContent = ''
+                error.className = 'error'
+            } else {
+                console.log('error')
+                showError(input, error);
+            }
+        })
+    })
+})();
+
+function showError(input, error) {
+    if (input.validity.valueMissing) {
+        error.textContent = "You need to enter your details"
+    } else if (input.validity.typeMismatch) {
+        error.textContent = "Entered value needs to match the field"
+    } else if (input.validity.tooShort) {
+        error.textContent = "Length is not appropriate"
+    }
+}
+
 document.querySelector(".btn-submit").addEventListener("click", () => {
     const title = document.querySelector(".title").value
     const author = document.querySelector(".author").value
